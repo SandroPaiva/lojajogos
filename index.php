@@ -1,28 +1,37 @@
-<?php
-require_once 'config/Database.php';
-require_once 'classes/Jogo.php';
+<?php 
 
+//Arquivo necessário para conectar a página ao banco de dados.
+require_once 'config/Database.php';
+require_once 'classes/Categoria.php';
+require_once 'classes/Usuario.php';
+require_once 'classes/Carrinho.php';
+
+//Inicializa a conexão
 $database = new Database();
 $db = $database->getConnection();
 
-$jogo = new Jogo($db);
-$resultado = $jogo->listar();
+//Prepara a classe Categoria
+$usuario = new Usuario($db);
+$usuario->nome = "Admin"; //Nome do usuario
+$usuario->email = "admin@lojajogos.local"; //Emai do usuario
+$usuario->senha = "SenhaSegura123"; //Senha do usuario
+$usuario->papel = "admin"; //papel do usuário
 
-echo "<h2>Catálogo de Jogos</h2>";
-
-// Verifica se existem jogos cadastrados
-if($resultado->rowCount() > 0) {
-    // fetch(PDO::FETCH_ASSOC) transforma a linha do banco em um array associativo
-    while($linha = $resultado->fetch(PDO::FETCH_ASSOC)) {
-        // Formatação do preço para o padrão brasileiro
-        $preco_formatado = number_format($linha['preco'], 2, ',', '.');
-        
-        echo "<p>";
-        echo "<strong>{$linha['titulo']}</strong><br>";
-        echo "Categoria: {$linha['categoria_nome']} | Preço: R$ {$preco_formatado}";
-        echo "</p><hr>";
-    }
+//Tenta criar
+if($usuario->login($usuario->email, $usuario->senha)) {
+    echo "Login efetuado com sucesso! Bem-vindo, {$usuario->nome}. Nível: {$usuario->papel}";
 } else {
-    echo "Nenhum jogo encontrado no catálogo.";
+    echo "Email ou senha incorretos.";
 }
+
+$carrinho = new Carrinho($db);
+$carrinho->usuario_id = 1; // Coloque o ID real do seu usuário Admin
+$carrinho->jogo_id = 1;    // Coloque o ID do jogo que você cadastrou na fase anterior
+
+if($carrinho->adicionar()) {
+    echo "Jogo adicionado ao carrinho!";
+}else{
+    echo "Algo deu errado com o carrinho!";
+}
+
 ?>
