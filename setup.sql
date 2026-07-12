@@ -55,3 +55,11 @@ CREATE TABLE jogos_plataforma (
     FOREIGN KEY (plataforma_id) REFERENCES plataformas(id) ON DELETE RESTRICT
 );
 
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL, -- 255 é o tamanho recomendado para hashes Bcrypt/Argon2
+    papel ENUM('cliente', 'admin') DEFAULT 'cliente',
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
