@@ -14,14 +14,14 @@ $db = $database->getConnection();
 $usuario = new Usuario($db);
 $usuario->nome = "Admin"; //Nome do usuario
 $usuario->email = "admin@lojajogos.local"; //Emai do usuario
-$usuario->senha = "SenhaSegura123"; //Senha do usuario
+$usuario->senha = "SenhaSegura1234"; //Senha do usuario
 $usuario->papel = "admin"; //papel do usuário
 
 //Tenta criar
-if($usuario->registrar()){
-    echo "Usuário ${nome} adicionado com sucesso!";
-}else{
-    echo "Erro ao adicionar o usuário ${nome}.";
+if($usuario->login($usuario->email, $usuario->senha)) {
+    echo "Login efetuado com sucesso! Bem-vindo, {$usuario->nome}. Nível: {$usuario->papel}";
+} else {
+    echo "Email ou senha incorretos.";
 }
 
 ?>

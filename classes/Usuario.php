@@ -41,5 +41,33 @@ class Usuario {
         }
         return false;
     }
+    // Método para autenticar o usuário
+    public function login($email_digitado, $senha_digitada) {
+        // 1. Buscamos o usuário no banco APENAS pelo email
+        $query = "SELECT id, nome, senha, papel FROM " . $this->tabela . " WHERE email = :email LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        
+        $email_digitado = strip_tags($email_digitado);
+        $stmt->bindParam(':email', $email_digitado);
+        $stmt->execute();
+
+        // 2. Verifica se encontrou algum usuário com esse email
+        if($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $hash_salvo = $row['senha'];
+
+            // 3. A mágica da segurança: o PHP compara a senha digitada em texto puro com o hash complexo do banco
+            if(password_verify($senha_digitada, $hash_salvo)) {
+                // Login bem-sucedido! (Preenchemos o objeto com os dados do banco)
+                $this->id = $row['id'];
+                $this->nome = $row['nome'];
+                $this->papel = $row['papel'];
+                return true;
+            }
+        }
+        
+        // Retorna falso se o email não existir OU se a senha estiver errada
+        return false;
+    }
 }
 ?>
