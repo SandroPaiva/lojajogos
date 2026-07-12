@@ -5,7 +5,7 @@ require_once 'config/Database.php';
 
 $db = new Database();
 
-$conexao = $db->getsConnection();
+$conexao = $db->getConnection();
 
 if($conexao) {
     echo "<h1>Banco ${db_name} conectado com sucesso usando PDO!</h1>";
