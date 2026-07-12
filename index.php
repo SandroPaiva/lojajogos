@@ -2,16 +2,21 @@
 
 //Arquivo necessário para conectar a página ao banco de dados.
 require_once 'config/Database.php';
+require_once 'classes/Categoria.php';
 
-$db = new Database();
+//Inicializa a conexão
+$database = new Database();
+$db = $database->getConnection();
 
-$conexao = $db->getConnection();
+//Prepara a classe Categoria
+$categoria = new Categoria($db);
+$categoria->nome = "RPG"; //nome da categoria que queremos salvar
 
-if($conexao) {
-    echo "<h1>Banco ${db_name} conectado com sucesso usando PDO!</h1>";
+//Tenta criar
+if($categoria->criar()){
+    echo "Categoria criada com sucesso!";
+}else{
+    echo "Erro ao criar categroria.";
 }
-
-
-
 
 ?>

@@ -14,7 +14,7 @@ class Database{
 
         try{
             // DSN (Data Source Name) com charset utf8mb4 forçado na conexão para que o PHP e o MySQL conversem na mesma lingua, e armazenando o host e o nome do banco na variável $dsn
-            $dsn = "mysql:host" . $this->host . "dbname=" . $this->db_name . ";charset=utf8mb4";
+            $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=utf8mb4";
             $this->conn = new PDO($dsn, $this->username, $this->password);
 
             //Configurações de segurança e comportamento do PDO
