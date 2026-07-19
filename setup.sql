@@ -63,3 +63,51 @@ CREATE TABLE usuarios (
     papel ENUM('cliente', 'admin') DEFAULT 'cliente',
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE carrinho (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    jogo_id INT NOT NULL,
+    quantidade INT NOT NULL DEFAULT 1,
+    adicionado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (jogo_id) REFERENCES jogos(id) ON DELETE CASCADE,
+    UNIQUE(usuario_id, jogo_id) -- Garante que o mesmo jogo não ocupe duas linhas
+);
+
+INSERT INTO fabricantes (nome, site_url) VALUES
+('Blizzard Entertainment', 'https://www.blizzard.com'),
+('Electronic Arts', 'https://www.ea.com'),
+('Xbox Game Studios', 'https://www.xbox.com'),
+('Sony Interactive Entertainment', 'https://www.playstation.com'),
+('Nintendo', 'https://www.nintendo.com'),
+('Ubisoft', 'https://www.ubisoft.com'),
+('Square Enix', 'https://square-enix-games.com'),
+('Valve Corporation', 'https://www.valvesoftware.com'),
+('Rockstar Games', 'https://www.rockstargames.com'),
+('Epic Games', 'https://www.epicgames.com');
+
+INSERT INTO fabricantes (nome, site_url) VALUES
+('Bandai Namco Entertainment', 'https://www.bandainamcoent.com'),
+('FromSoftware', 'https://www.fromsoftware.jp');
+
+INSERT INTO categorias (nome) VALUES
+('Aventura'),
+('Estratégia'),
+('Esportes'),
+('Simulação'),
+('Corrida'),
+('Luta'),
+('Terror'),
+('Plataforma'),
+('Mundo Aberto');
+
+INSERT INTO jogos (titulo, preco, categoria_id, fabricante_id) VALUES ('Elden Ring', 250.00, 1, 1);
+
+CREATE TABLE pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    total DECIMAL(10,2) NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE RESTRICT
+);

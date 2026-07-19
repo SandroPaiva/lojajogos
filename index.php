@@ -5,6 +5,7 @@ require_once 'config/Database.php';
 require_once 'classes/Categoria.php';
 require_once 'classes/Usuario.php';
 require_once 'classes/Carrinho.php';
+require_once 'classes/Pedido.php';
 
 //Inicializa a conexão
 $database = new Database();
@@ -24,14 +25,22 @@ if($usuario->login($usuario->email, $usuario->senha)) {
     echo "Email ou senha incorretos.";
 }
 
-$carrinho = new Carrinho($db);
-$carrinho->usuario_id = 1; // Coloque o ID real do seu usuário Admin
-$carrinho->jogo_id = 1;    // Coloque o ID do jogo que você cadastrou na fase anterior
+//$carrinho = new Carrinho($db);
+//$carrinho->usuario_id = 1; // Coloque o ID real do seu usuário Admin
+//$carrinho->jogo_id = 1;    // Coloque o ID do jogo que você cadastrou na fase anterior
 
-if($carrinho->adicionar()) {
-    echo "Jogo adicionado ao carrinho!";
-}else{
-    echo "Algo deu errado com o carrinho!";
+//if($carrinho->adicionar()) {
+    //echo "Jogo adicionado ao carrinho!";
+//}else{
+//    echo "Algo deu errado com o carrinho!";
+//}
+
+$pedido = new Pedido($db);
+// Tenta comprar 1 unidade do jogo ID 1 para o usuário ID 1
+if($pedido->finalizarCompraSimples(1, 1, 1)) {
+    echo "Compra realizada com sucesso! Estoque deduzido.";
+} else {
+    echo "Falha ao processar a compra. Verifique os logs.";
 }
 
 ?>
