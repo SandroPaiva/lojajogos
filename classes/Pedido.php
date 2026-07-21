@@ -72,6 +72,7 @@ class Pedido{
         $stmt->bindValue(':usuario_id', $usuario_id, PDO::PARAM_INT);
         $stmt->execute();
 
+        // Retorna todos os resultados como um array associativo
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $results === false ? [] : $results;
     }

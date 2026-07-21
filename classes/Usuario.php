@@ -3,6 +3,7 @@ class Usuario {
     private $conn;
     private $tabela = "usuarios";
 
+    public $id;
     public $nome;
     public $email;
     public $senha;
