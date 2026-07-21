@@ -35,12 +35,29 @@ if($usuario->login($usuario->email, $usuario->senha)) {
 //    echo "Algo deu errado com o carrinho!";
 //}
 
-$pedido = new Pedido($db);
+//$pedido = new Pedido($db);
 // Tenta comprar 1 unidade do jogo ID 1 para o usuário ID 1
-if($pedido->finalizarCompraSimples(1, 1, 1)) {
-    echo "Compra realizada com sucesso! Estoque deduzido.";
-} else {
-    echo "Falha ao processar a compra. Verifique os logs.";
+//if($pedido->finalizarCompraSimples(1, 1, 1)) {
+//    echo "Compra realizada com sucesso! Estoque deduzido.";
+//} else {
+//    echo "Falha ao processar a compra. Verifique os logs.";
+//}
+
+$pedido = new Pedido($db);
+// Busca as compras do Admin (id 1). Garante que $historico será um array para evitar warnings ao usar count().
+$historico = $pedido->listaHistorico(1);
+if (!is_array($historico)) {
+    $historico = [];
+}
+
+echo "<h2>Histórico de Compras</h2>";
+
+if(count($historico) > 0){
+    foreach($historico as $linha){
+        echo "Pedido #" . $linha['pedido_id'] . " | Cliente: " . $linha['cliente_nome'] . " | Total: R$ " . $linha['total'] . " | Data: " . $linha['criado_em'] . "<br>";
+    }
+}else{
+    echo "Nenhum pedido encontrado para este usuário.";
 }
 
 ?>

@@ -7,6 +7,8 @@ class Pedido{
         $this->conn = $db;
     }
 
+
+
     //Método seguro contra concorrencia para finalizar a compra de 1 item
     public function finalizarCompraSimples(int $usuario_id, int $jogo_id, int $quantidade_comprada): bool{
         try{
@@ -55,6 +57,24 @@ class Pedido{
         }
     }
 
+    // Retorna o histórico de pedidos de um usuário com o nome dele
+    public function listaHistorico(int $usuario_id): array{
+        $query = "SELECT
+                    p.id as pedido_id,
+                    p.total,
+                    p.criado_em,
+                    u.nome AS cliente_nome
+                FROM pedidos p
+                INNER JOIN usuarios u ON p.usuario_id = u.id
+                WHERE p.usuario_id = :usuario_id
+                ORDER BY p.criado_em DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(':usuario_id', $usuario_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $results === false ? [] : $results;
+    }
 
 }
 
